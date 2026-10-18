@@ -1,13 +1,13 @@
 ---
 import { Image } from 'astro:assets';
-import { excerpt, formatDate, postPath, type Post } from '../lib/posts';
+import { excerpt, formatDate, link, postPath, type Post } from '../lib/posts';
 
 interface Props {
   post: Post;
 }
 
 const { post } = Astro.props;
-const href = postPath(post);
+const href = link(postPath(post));
 ---
 
 <article class="card">

@@ -22,3 +22,8 @@ npm run preview  # podgląd zbudowanej strony
 - `raw/` – oryginalny eksport z WordPress.com (kopia zapasowa).
 
 Adresy wpisów, kategorii (`/category/...`) i tagów (`/tag/...`) są takie same jak na WordPressie.
+
+## Publikacja
+
+Strona publikuje się sama na GitHub Pages po każdym `git push` na gałąź `main`
+(automat w `.github/workflows/deploy.yml`). Postęp widać w zakładce **Actions** repozytorium.

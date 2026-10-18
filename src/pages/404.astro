@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
+import { link } from '../lib/posts';
 ---
 
 <Base title="Nie znaleziono">
   <article class="post">
     <h1>Nie ma takiej strony</h1>
-    <p>Wróć na <a href="/">stronę główną</a> i wybierz coś z listy wpisów.</p>
+    <p>Wróć na <a href={link('/')}>stronę główną</a> i wybierz coś z listy wpisów.</p>
   </article>
 </Base>

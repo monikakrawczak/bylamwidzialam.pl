@@ -5,6 +5,11 @@ export type Post = CollectionEntry<'posts'>;
 export const SITE_TITLE = 'BYŁAM WIDZIAŁAM';
 export const SITE_DESCRIPTION = 'blog teatralny';
 
+/** Prefixes a site path with the base path (the site may live in a subdirectory, e.g. on GitHub Pages). */
+export function link(path: string): string {
+  return import.meta.env.BASE_URL.replace(/\/$/, '') + path;
+}
+
 export const NAV = [
   { href: '/', label: 'Główna' },
   { href: '/category/recenzje/', label: 'Recenzje' },

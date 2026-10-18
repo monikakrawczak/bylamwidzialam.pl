@@ -1,8 +1,14 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
+// Until the bylamwidzialam.pl domain points here, GitHub Pages serves the site from a subdirectory;
+// the deploy workflow sets SITE_URL and BASE_PATH accordingly.
+const site = process.env.SITE_URL ?? 'https://bylamwidzialam.pl';
+const base = process.env.BASE_PATH ?? '/';
+
 export default defineConfig({
-  site: 'https://bylamwidzialam.pl',
+  site,
+  base,
   trailingSlash: 'always',
   integrations: [sitemap()],
   image: {

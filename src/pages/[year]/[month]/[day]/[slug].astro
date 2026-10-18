@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import { Image, getImage } from 'astro:assets';
 import Base from '../../../../layouts/Base.astro';
-import { excerpt, formatDate, getPosts, postPath, slugify, type Post } from '../../../../lib/posts';
+import { excerpt, formatDate, getPosts, link, postPath, slugify, type Post } from '../../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -36,7 +36,7 @@ const ogImage = featured ? (await getImage({ src: featured, width: 1200 })).src 
         {post.data.categories.map((c) => (
           <>
             {' · '}
-            <a href={`/category/${slugify(c)}/`}>{c}</a>
+            <a href={link(`/category/${slugify(c)}/`)}>{c}</a>
           </>
         ))}
       </p>
@@ -51,13 +51,13 @@ const ogImage = featured ? (await getImage({ src: featured, width: 1200 })).src 
     {post.data.tags.length > 0 && (
       <ul class="tags" aria-label="Tagi">
         {post.data.tags.map((t) => (
-          <li><a href={`/tag/${slugify(t)}/`}>{t}</a></li>
+          <li><a href={link(`/tag/${slugify(t)}/`)}>{t}</a></li>
         ))}
       </ul>
     )}
   </article>
   <nav class="post-nav" aria-label="Sąsiednie wpisy">
-    {older ? <a href={postPath(older)}><small>← Poprzedni</small>{older.data.title}</a> : <span />}
-    {newer ? <a href={postPath(newer)} class="next"><small>Następny →</small>{newer.data.title}</a> : <span />}
+    {older ? <a href={link(postPath(older))}><small>← Poprzedni</small>{older.data.title}</a> : <span />}
+    {newer ? <a href={link(postPath(newer))} class="next"><small>Następny →</small>{newer.data.title}</a> : <span />}
   </nav>
 </Base>

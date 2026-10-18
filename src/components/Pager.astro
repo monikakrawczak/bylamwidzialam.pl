@@ -1,11 +1,13 @@
 ---
+import { link } from '../lib/posts';
+
 interface Props {
   current: number;
   total: number;
 }
 
 const { current, total } = Astro.props;
-const url = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
+const url = (n: number) => link(n === 1 ? '/' : `/page/${n}/`);
 ---
 
 {total > 1 && (
