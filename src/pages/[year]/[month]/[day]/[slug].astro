@@ -1,0 +1,63 @@
+---
+import { render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import Base from '../../../../layouts/Base.astro';
+import { excerpt, formatDate, getPosts, postPath, slugify, type Post } from '../../../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post, i) => {
+    const [, year, month, day, slug] = postPath(post).split('/');
+    return {
+      params: { year, month, day, slug },
+      props: { post, newer: posts[i - 1], older: posts[i + 1] },
+    };
+  });
+}
+
+interface Props {
+  post: Post;
+  newer?: Post;
+  older?: Post;
+}
+
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post);
+const featured = post.data.featured_image;
+const showFeatured = featured && !post.body?.includes(featured.src.split('/').pop()!.split('?')[0]);
+const ogImage = featured ? (await getImage({ src: featured, width: 1200 })).src : undefined;
+---
+
+<Base title={post.data.title} description={excerpt(post, 160)} image={ogImage}>
+  <article class="post">
+    <header>
+      <p class="meta">
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        {post.data.categories.map((c) => (
+          <>
+            {' · '}
+            <a href={`/category/${slugify(c)}/`}>{c}</a>
+          </>
+        ))}
+      </p>
+      <h1>{post.data.title}</h1>
+    </header>
+    {showFeatured && (
+      <Image class="featured" src={featured} alt="" widths={[720, 1440]} sizes="(min-width: 760px) 720px, 100vw" loading="eager" />
+    )}
+    <div class="prose">
+      <Content />
+    </div>
+    {post.data.tags.length > 0 && (
+      <ul class="tags" aria-label="Tagi">
+        {post.data.tags.map((t) => (
+          <li><a href={`/tag/${slugify(t)}/`}>{t}</a></li>
+        ))}
+      </ul>
+    )}
+  </article>
+  <nav class="post-nav" aria-label="Sąsiednie wpisy">
+    {older ? <a href={postPath(older)}><small>← Poprzedni</small>{older.data.title}</a> : <span />}
+    {newer ? <a href={postPath(newer)} class="next"><small>Następny →</small>{newer.data.title}</a> : <span />}
+  </nav>
+</Base>

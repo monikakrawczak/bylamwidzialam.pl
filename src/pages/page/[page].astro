@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import Pager from '../../components/Pager.astro';
+import { getPosts } from '../../lib/posts';
+import { pageOf, PAGE_SIZE } from '../../lib/pagination';
+
+export async function getStaticPaths() {
+  const total = Math.ceil((await getPosts()).length / PAGE_SIZE);
+  return Array.from({ length: total - 1 }, (_, i) => ({ params: { page: String(i + 2) } }));
+}
+
+const page = pageOf(await getPosts(), Number(Astro.params.page));
+---
+
+<Base title={`Strona ${page.current}`}>
+  {page.posts.map((post) => <PostCard post={post} />)}
+  <Pager current={page.current} total={page.total} />
+</Base>

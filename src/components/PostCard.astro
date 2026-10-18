@@ -1,0 +1,27 @@
+---
+import { Image } from 'astro:assets';
+import { excerpt, formatDate, postPath, type Post } from '../lib/posts';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const href = postPath(post);
+---
+
+<article class="card">
+  {post.data.featured_image && (
+    <a href={href} class="card-image" tabindex="-1" aria-hidden="true">
+      <Image src={post.data.featured_image} alt="" widths={[360, 720]} sizes="(min-width: 720px) 220px, 100vw" />
+    </a>
+  )}
+  <div class="card-body">
+    <p class="meta">
+      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+      {post.data.categories.length > 0 && <span> · {post.data.categories.join(', ')}</span>}
+    </p>
+    <h2><a href={href}>{post.data.title}</a></h2>
+    <p class="excerpt">{excerpt(post)}</p>
+  </div>
+</article>
